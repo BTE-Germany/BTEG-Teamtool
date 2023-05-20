@@ -3,8 +3,8 @@ const prisma = new PrismaClient();
 
 module.exports = async function (interaction) {
   const time = Date.parse(`${interaction.options.get("time").value.replace(" ", "T")}:00`);
-  const user = interaction.options.mention
-    ? interaction.options.mention.id
+  const user = interaction.options.get("mention")
+    ? interaction.options.get("mention").id
     : interaction.user.id;
   const channel = interaction.options.channel
     ? interaction.options.channel.id
