@@ -3,6 +3,7 @@
 A very great, unique, feature rich bot with never before seen features like:
 
 - Reminders
+- A list with statuses
 
 Start this bot with the following steps:
 
