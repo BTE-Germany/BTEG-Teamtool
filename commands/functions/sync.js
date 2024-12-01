@@ -5,7 +5,7 @@ module.exports = async function (interaction) {
   //sync all users and get their highest role
   let guild = interaction.guild;
   let members = await guild.members.fetch();
- 
+
   console.log("Syncing all users and roles...");
 
   members.forEach(async (member) => {
@@ -31,6 +31,7 @@ module.exports = async function (interaction) {
         })
         .catch(async (e) => {
           console.log(`Could not sync ${member.user.tag}`);
+          console.log(e);
         });
     } else {
       prisma.absenceUser
@@ -38,6 +39,7 @@ module.exports = async function (interaction) {
           data: {
             id: member.user.id,
             roleID: highestRole.id,
+            status: 0
           },
         })
         .then(async () => {
@@ -45,8 +47,34 @@ module.exports = async function (interaction) {
         })
         .catch(async (e) => {
           console.log(`Could not sync ${member.user.tag}`);
+          console.log(e);
         });
     }
+  });
+
+  //look if any users are in the table that are not in the server
+  let allUsers = await prisma.absenceUser.findMany();
+  allUsers.forEach(async (user) => {
+    //check if the user is in the server using the members collection we fetched earlier
+    let test = members.get(user.id);
+    if (test === undefined) {
+      //if the user is not in the server, delete them from the table
+      prisma.absenceUser
+        .delete({
+          where: {
+            id: user.id,
+          },
+        })
+        .then(async () => {
+          console.log(`Successfully deleted ${user.id}`);
+        })
+        .catch(async (e) => {
+          console.log(`Could not delete ${user.id}`);
+          console.log(e);
+        }
+        );
+    }
+
   });
 
   //sync all the highest roles to the roles table
@@ -89,6 +117,32 @@ module.exports = async function (interaction) {
         });
     }
   });
+
+  //look if any roles are in the table that are not in the server
+  let allRoles = await prisma.absenceRole.findMany();
+  allRoles.forEach(async (role) => {
+    //check if the role is in the server using the roles collection we fetched earlier
+    let test = guild.roles.cache.get(role.id);
+    if (test === undefined) {
+      //if the role is not in the server, delete them from the table
+      prisma.absenceRole
+        .delete({
+          where: {
+            id: role.id,
+          },
+        })
+        .then(async () => {
+          console.log(`Successfully deleted ${role.id}`);
+        })
+        .catch(async (e) => {
+          console.log(`Could not delete ${role.id}`);
+          console.log(e);
+        }
+        );
+    }
+
+  });
+
 
   //reply to the interaction
   await interaction.reply({
