@@ -1,16 +1,15 @@
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
-const emotes = require("../../emotes.json");
 
 module.exports = async function (interaction) {
   //sync all users and get their highest role
   let guild = interaction.guild;
   let members = await guild.members.fetch();
-  let roles = await guild.roles.fetch();
  
   console.log("Syncing all users and roles...");
 
   members.forEach(async (member) => {
+    console.log("Syncing user: " + member.user.tag);
     let highestRole = member.roles.highest;
     let test = await prisma.absenceUser.findFirst({
       where: {

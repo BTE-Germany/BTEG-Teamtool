@@ -8,8 +8,12 @@ const client = new Discord.Client({
   intents: [
     Discord.GatewayIntentBits.Guilds,
     Discord.GatewayIntentBits.MessageContent,
+    Discord.GatewayIntentBits.GuildMembers
   ],
 });
+
+client.options.fetchAllMembers = true;
+client.options.fetchTimeout = 60000;
 
 client.on("ready", () => {
   console.info("Ready! Logged in as " + client.user.username);
