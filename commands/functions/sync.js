@@ -108,7 +108,7 @@ module.exports = async function (interaction) {
           data: {
             id: highestRole.id,
             emote: "🤵",
-            guildID: guild.id,
+            guild: guild.id,
           },
         })
         .then(async () => {
