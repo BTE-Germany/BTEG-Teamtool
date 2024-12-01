@@ -1,5 +1,6 @@
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
+const emotes = require("../../emotes.json");
 
 module.exports = async function (interaction) {
   const channel = interaction.options.channel || interaction.channel;
@@ -14,8 +15,8 @@ module.exports = async function (interaction) {
             {
               style: 2,
               emoji: {
-                id: `1009396982399373348`,
-                name: `onlinestatus`,
+                id: emotes["online"].split(":")[2].replace(">", ""),
+                name: emotes["online"].split(":")[1],
                 animated: false,
               },
               custom_id: `AbsenceSetAvailable`,
@@ -25,8 +26,8 @@ module.exports = async function (interaction) {
             {
               style: 2,
               emoji: {
-                id: `1009396978683219979`,
-                name: `idlestatus`,
+                id: emotes["idle"].split(":")[2].replace(">", ""),
+                name: emotes["idle"].split(":")[1],
                 animated: false,
               },
               custom_id: `AbsenceSetIdle`,
@@ -36,8 +37,8 @@ module.exports = async function (interaction) {
             {
               style: 2,
               emoji: {
-                id: `1009396980704874528`,
-                name: `dndstatus`,
+                id: emotes["dnd"].split(":")[2].replace(">", ""),
+                name: emotes["dnd"].split(":")[1],
                 animated: false,
               },
               custom_id: `AbsenceSetDND`,
@@ -47,7 +48,7 @@ module.exports = async function (interaction) {
             {
               style: 2,
               emoji: {
-                id: `1009140759523495936`,
+                id: emotes["offline"].split(":")[2].replace(">", ""),
                 name: `offline`,
                 animated: false,
               },
