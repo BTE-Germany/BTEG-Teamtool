@@ -8,6 +8,7 @@ module.exports = async function (interaction) {
   let members = await guild.members.fetch();
   let roles = await guild.roles.fetch();
  
+  console.log("Syncing all users and roles...");
 
   members.forEach(async (member) => {
     let highestRole = member.roles.highest;
