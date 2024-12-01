@@ -100,6 +100,7 @@ module.exports = async function (interaction) {
         })
         .catch(async (e) => {
           console.log(`Could not sync ${highestRole.name}`);
+          console.log(e);
         });
     } else {
       prisma.absenceRole
@@ -107,6 +108,7 @@ module.exports = async function (interaction) {
           data: {
             id: highestRole.id,
             name: highestRole.name,
+            emote: "🤵"
           },
         })
         .then(async () => {
@@ -114,6 +116,7 @@ module.exports = async function (interaction) {
         })
         .catch(async (e) => {
           console.log(`Could not sync ${highestRole.name}`);
+          console.log(e);
         });
     }
   });
