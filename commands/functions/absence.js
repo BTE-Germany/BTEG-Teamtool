@@ -6,7 +6,7 @@ module.exports = async function (interaction) {
   interaction.reply({ content: "Generating a new embed...", ephemeral: true });
   channel
     .send({
-      content: "",
+      content: "** **",
       tts: false,
       components: [
         {
