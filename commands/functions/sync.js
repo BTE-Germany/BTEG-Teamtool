@@ -107,8 +107,8 @@ module.exports = async function (interaction) {
         .create({
           data: {
             id: highestRole.id,
-            name: highestRole.name,
-            emote: "🤵"
+            emote: "🤵",
+            guildID: guild.id,
           },
         })
         .then(async () => {
