@@ -52,13 +52,13 @@ module.exports = async function (interaction) {
     }
   });
 
-  //look if any users are in the table that are not in the server
+  //look if any users are in the table that are not in the server or are bots
   let allUsers = await prisma.absenceUser.findMany();
   allUsers.forEach(async (user) => {
     //check if the user is in the server using the members collection we fetched earlier
     let test = members.get(user.id);
-    if (test === undefined) {
-      //if the user is not in the server, delete them from the table
+    if (test === undefined || test.user.bot) {
+      //if the user is not in the server or is a bot, delete it from the table
       prisma.absenceUser
         .delete({
           where: {
@@ -71,10 +71,8 @@ module.exports = async function (interaction) {
         .catch(async (e) => {
           console.log(`Could not delete ${user.id}`);
           console.log(e);
-        }
-        );
+        });
     }
-
   });
 
   //sync all the highest roles to the roles table
@@ -121,13 +119,13 @@ module.exports = async function (interaction) {
     }
   });
 
-  //look if any roles are in the table that are not in the server
+  //look if any roles are in the table that are not in the server or have 0 users
   let allRoles = await prisma.absenceRole.findMany();
   allRoles.forEach(async (role) => {
     //check if the role is in the server using the roles collection we fetched earlier
     let test = guild.roles.cache.get(role.id);
     if (test === undefined) {
-      //if the role is not in the server, delete them from the table
+      //if the role is not in the server, delete it from the table
       prisma.absenceRole
         .delete({
           where: {
@@ -135,14 +133,65 @@ module.exports = async function (interaction) {
           },
         })
         .then(async () => {
-          console.log(`Successfully deleted ${role.id}`);
+          console.log(`Successfully deleted ${role.name}`);
         })
         .catch(async (e) => {
-          console.log(`Could not delete ${role.id}`);
+          console.log(`Could not delete ${role.name}`);
           console.log(e);
         }
         );
+    } else {
+      //if the role is in the server, check if it has 0 users
+      let users = await prisma.absenceUser.findMany({
+        where: {
+          roleID: role.id,
+        },
+      });
+      if (users.length === 0) {
+        //if the role has 0 users, delete it from the table
+        prisma.absenceRole
+          .delete({
+            where: {
+              id: role.id,
+            },
+          })
+          .then(async () => {
+            console.log(`Successfully deleted ${role.name}`);
+          })
+          .catch(async (e) => {
+            console.log(`Could not delete ${role.name}`);
+            console.log(e);
+          }
+          );
+
+      }
     }
+  }
+  );
+
+
+  //sort roles in prisma table, using the order they came in from discord
+  //use the same allroles variable from before
+  let roleOrder = 0;
+  allRoles.forEach(async (role) => {
+    roleOrder++;
+    prisma.absenceRole
+      .update({
+        where: {
+          id: role.id,
+        },
+        data: {
+          order: roleOrder,
+        },
+      })
+      .then(async () => {
+        console.log(`Successfully sorted ${role.name}`);
+      })
+      .catch(async (e) => {
+        console.log(`Could not sort ${role.name}`);
+        console.log(e);
+      }
+      );
 
   });
 

@@ -33,7 +33,9 @@ module.exports = async function (client) {
         console.log(e);
       }
     });
-    let roles = await prisma.absenceRole.findMany();
+    let roles = await prisma.absenceRole.findMany({orderBy: {
+      order: 'desc'
+    }});
     let fields = [];
     roles.forEach((role) => {
       if (!data[role.id]) {

@@ -34,5 +34,6 @@ model absenceRole {
     id      String @id
     emote   String
     guild   String
+    order   Int?
 }
 
