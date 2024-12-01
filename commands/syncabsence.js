@@ -6,6 +6,7 @@ module.exports = {
     .setName("syncabsence")
     .setDescription("Syncs users and roles for the absence system"),
   async execute(interaction) {
+    console.log("Syncing all users and roles...");
     await execute(interaction);
   },
 };
