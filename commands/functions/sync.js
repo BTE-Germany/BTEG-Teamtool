@@ -83,41 +83,28 @@ module.exports = async function (interaction) {
         id: highestRole.id,
       },
     });
-    if (test !== null) {
-      prisma.absenceRole
-        .update({
-          where: {
-            id: highestRole.id,
-          },
-          data: {
-            name: highestRole.name,
-          },
-        })
-        .then(async () => {
-          console.log(`Successfully synced ${highestRole.name}`);
-        })
-        .catch(async (e) => {
-          console.log(`Could not sync ${highestRole.name}`);
-          console.log(e);
-        });
-    } else {
-      prisma.absenceRole
-        .create({
-          data: {
-            id: highestRole.id,
-            emote: "🤵",
-            guild: guild.id,
-          },
-        })
-        .then(async () => {
-          console.log(`Successfully synced ${highestRole.name}`);
-        })
-        .catch(async (e) => {
-          console.log(`Could not sync ${highestRole.name}`);
-          console.log(e);
-        });
+    if (test === null) {
+      {
+        prisma.absenceRole
+          .create({
+            data: {
+              id: highestRole.id,
+              emote: "🤵",
+              guild: guild.id,
+            },
+          })
+          .then(async () => {
+            console.log(`Successfully synced ${highestRole.name}`);
+          })
+          .catch(async (e) => {
+            console.log(`Could not sync ${highestRole.name}`);
+            console.log(e);
+          });
+      }
     }
-  });
+  }
+  );
+
 
   //look if any roles are in the table that are not in the server or have 0 users
   let allRoles = await prisma.absenceRole.findMany();
