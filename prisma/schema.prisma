@@ -6,12 +6,12 @@ generator client {
 }
 
 datasource db {
-  provider = "mongodb"
+  provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
 model reminder {
-    id      String  @id @map("_id")
+    id      String  @id
     time    Int
     user    String
     channel String
@@ -19,19 +19,19 @@ model reminder {
 }
 
 model absenceUser {
-    id      String @id @map("_id")
+    id      String @id
     status  Int
     until   String?
     roleID  String
 }
 
 model absencePanel {
-    id      String @id @map("_id")
+    id      String @id
     channel String
 }
 
 model absenceRole {
-    id      String @id @map("_id")
+    id      String @id
     emote   String
     guild   String
 }
