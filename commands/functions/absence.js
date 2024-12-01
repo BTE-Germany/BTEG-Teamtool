@@ -7,7 +7,6 @@ module.exports = async function (interaction) {
   channel
     .send({
       content: "** **",
-      tts: false,
       components: [
         {
           type: 1,
