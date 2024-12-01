@@ -57,7 +57,7 @@ module.exports = async function (interaction) {
   allUsers.forEach(async (user) => {
     //check if the user is in the server using the members collection we fetched earlier
     let test = members.get(user.id);
-    if (test === undefined || test.user.bot) {
+    if (test === undefined || test.user.bot || test.user.id === interaction.client.user.id) {
       //if the user is not in the server or is a bot, delete it from the table
       prisma.absenceUser
         .delete({
